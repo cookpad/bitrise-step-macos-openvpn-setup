@@ -2,7 +2,7 @@
 
 Set up a VPN using the OpenVPN client on macOS.
 
-Based on https://github.com/bitrise-steplib/bitrise-step-open-vpn, with an additional call to `scutil` and `dscacheutil`.
+Based on https://github.com/bitrise-steplib/bitrise-step-open-vpn, with an additional call to `scutil` and `dscacheutil`. Also, stop using compression option so to enable compatibility with AWS Client VPN.
 
 **WARNING:** Made for internal Cookpad use. Do not use it directly from your Bitrise workflow, it could break at anytime. We do not accept issues or pull requests from outside contributors. But feel free to have a look or fork.
 
