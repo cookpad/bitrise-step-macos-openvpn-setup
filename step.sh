@@ -13,6 +13,18 @@ cd "$working_dir"
   echo "$client_key" | base64 -D -o client.key
 )
 
+if [ -n "$crt_required_validity_seconds" ]; then
+  crt_end=$(openssl x509 -enddate -noout -in client.crt)
+  if openssl x509 -checkend "$crt_required_validity_seconds" -noout -in client.crt > /dev/null; then
+    echo "VPN client certificate is valid for more than $crt_required_validity_seconds seconds ($crt_end)."
+  else
+    echo "VPN client certificate will expire in less than $crt_required_validity_seconds seconds ($crt_end)." >&2
+    echo "Unset \$crt_required_validity_seconds ("Client Certificate minimum validity in seconds") in the Bitrise step settings while you issue a new VPN client certificate." >&2
+    echo "BE CAREFUL: Do not forget to set \$crt_required_validity_seconds to its previous value ($crt_required_validity_seconds) once you have finished updating the certificate." >&2
+    exit 1
+  fi
+fi
+
 log_path="$working_dir/ovpn.log"
 sudo openvpn --client --dev tun --proto "$proto" --remote "$host" "$port" --resolv-retry infinite --nobind --persist-key --persist-tun --verb 3 --ca ca.crt --cert client.crt --key client.key > "$log_path" 2>&1 &
 openvpn_pid=$!

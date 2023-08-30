@@ -97,6 +97,9 @@ inputs:
       summary: "Base64 encoded Client Private Key"
       is_required: true
       is_sensitive: true
+  - crt_required_validity_seconds: ""
+    opts:
+      title: "Client Certificate minimum validity in seconds"
   - dns_server: ""
     opts:
       title: "Specific DNS server when using the VPN"
